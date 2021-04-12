@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Complete + Brasil API</title>
+
+    <!-- Jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+</head>
+<body>
+    
+    CEP
+    <input type="text" id="zip" maxlength="8"><br>
+    Rua
+    <input type="text" id="street"><br>
+    Numero
+    <input type="text" id="n"><br>
+    Bairro
+    <input type="text" id="neighborhood"><br>
+    Cidade
+    <input type="text" id="city"><br>
+    UF
+    <input type="text" id="uf"><br>
+
+<script>
+
+$("#zip").focusout(function() {
+
+    var cep = document.getElementById("zip").value;
+    cep = cep.replace('-','');
+
+    // Pega os dados de acordo com o CEP
+    $.getJSON('https://brasilapi.com.br/api/cep/v1/' + cep, function(data) {
+    
+        console.log(data);
+        
+        // Caso seja um CEP com uma rua ou bairro especifico, ele irá auto preencher
+		if(data.street != undefined){
+			document.getElementById("street").value = data.street;
+		}
+		if(data.neighborhood != undefined){
+			document.getElementById("neighborhood").value = data.neighborhood;
+		}
+		document.getElementById("city").value = data.city;
+		document.getElementById("uf").value = data.state;        
+	});
+});
+</script>
+
+</body>
+</html>
